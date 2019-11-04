@@ -5,13 +5,13 @@ def input_students
   students = []
   # get the first name
   puts "Enter name"
-  name = gets.chomp
+  name = gets.strip
   if name.empty?
     puts "no value entered for name"
   end
 
   puts "Enter cohort"
-  cohort = gets.chomp
+  cohort = gets.strip
   if cohort.empty?
     puts "no value entered for cohort"
   end
@@ -23,13 +23,13 @@ def input_students
     # get another name from the user
 
     puts "Enter name"
-    name = gets.chomp
+    name = gets.strip
     if name.empty?
       puts "no value entered for name"
     end
 
     puts "Enter cohort"
-    cohort = gets.chomp
+    cohort = gets.strip
     if cohort.empty?
       puts "no value entered for cohort"
     end
