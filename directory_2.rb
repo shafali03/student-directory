@@ -50,9 +50,12 @@ def print(students)
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students".center(30)
+  if students.count < 2
+    puts "Overall, we have #{students.count} great student".center(30)
+  else
+    puts "Overall, we have #{students.count} great students".center(30)
+  end
 end
-
 #nothing happens until we call the method
 students = input_students
 print_header
