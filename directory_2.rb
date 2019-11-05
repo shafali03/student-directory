@@ -7,13 +7,13 @@ def input_students
   puts "Enter name"
   name = gets.strip
   if name.empty?
-    puts "no value entered for name"
+    puts "No value recorded for name"
   end
 
   puts "Enter cohort"
   cohort = gets.strip
   if cohort.empty?
-    puts "no value entered for cohort"
+    puts "No value recorded for cohort"
   end
   # while the name is not empty, repeat this code
   while !name.empty? do
@@ -25,13 +25,13 @@ def input_students
     puts "Enter name"
     name = gets.strip
     if name.empty?
-      puts "no value entered for name"
+      puts "No value recorded for name"
     end
 
     puts "Enter cohort"
     cohort = gets.strip
     if cohort.empty?
-      puts "no value entered for cohort"
+      puts "No value recorded for cohort"
     end
   end
   # return the array of students
@@ -50,9 +50,11 @@ def print(students)
 end
 
 def print_footer(students)
-  if students.count < 2
+  if students.count == 0
+    puts "No record, we have #{students.count} student"
+  elsif students.count < 2
     puts "Overall, we have #{students.count} great student".center(30)
-  else
+  elsif students.count >= 2
     puts "Overall, we have #{students.count} great students".center(30)
   end
 end
