@@ -1,39 +1,18 @@
 @students = [] # an empty array accessible to all methods
 
-def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-  # get the first name
-  name = gets.chomp
-  # while the name is not empty, repeat this code
-  while !name.empty? do
-    # add the student hash to the array
-    @students << {name: name, cohort: :november}
-    puts "Now we have #{@students.count} students"
-    # get another name from the user
-    name = gets.chomp
-  end
-end
-
-def interactive_menu
-  loop do
-    print_menu
-    process(gets.chomp)
-  end
-end
-
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
-  puts "9. Exit" # 9 because we'll be adding more items
+  puts "9. Exit"
 end
 
-def show_students
-  print_header
-  print_student_list
-  print_footer
+def interactive_menu
+  loop do
+    print_menu
+    process(STDIN.gets.chomp)
+  end
 end
 
 def process(selection)
@@ -53,19 +32,46 @@ def process(selection)
   end
 end
 
-def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
-end
+def input_students
 
-def print_student_list
-  @students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  puts "Please enter the names of the students"
+  puts "To finish, just hit return twice"
+
+  puts "Enter name"
+  name = STDIN.gets.strip
+  if name.empty?
+    puts "No value recorded for name"
   end
+
+  puts "Enter cohort"
+  cohort = STDIN.gets.strip
+  if cohort.empty?
+    puts "No value recorded for cohort"
+  end
+
+  while !name.empty? do
+    @students << {name: name, cohort: cohort}
+    puts "Now we have #{@students.count} students"
+    puts "Enter name"
+    name = STDIN.gets.strip
+    if name.empty?
+      puts "No value recorded for name"
+    end
+
+    puts "Enter cohort"
+    cohort = gets.empty?
+    if cohort = STDIN.gets.strip
+      puts "No value recorded for cohort"
+    end
+  end
+
+  @students
 end
 
-def print_footer
-  puts "Overall, we have #{@students.count} great students"
+def show_students
+  print_header
+  print_student_list
+  print_footer
 end
 
 def save_students
@@ -80,12 +86,48 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first# first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
-  name, cohort = line.chomp.split(',')
+    name, cohort = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym}
   end
   file.close
 end
+
+def print_header
+  puts "The students of Villains Academy".center(30)
+  puts "-------------".center(30)
+end
+
+def print_student_list
+  @students.each_with_index do |student, index|
+    puts "#{index + 1} #{student[:name]} (#{student[:cohort]} cohort)".center(30)
+  end
+end
+
+def print_footer
+  # puts "Overall, we have #{@students.count} great students"
+  if @students.count == 0
+    puts "No record, we have #{@students.count} student"
+  elsif @students.count < 2
+    puts "Overall, we have #{@students.count} great student".center(30)
+  elsif @students.count >= 2
+    puts "Overall, we have #{@students.count} great students".center(30)
+  end
+end
+
+try_load_students
 interactive_menu
